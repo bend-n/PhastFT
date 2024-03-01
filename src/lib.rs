@@ -8,8 +8,10 @@
 #![forbid(unsafe_code)]
 #![feature(portable_simd)]
 
+use num_traits::Float;
+
 use crate::cobra::cobra_apply;
-use crate::kernels::{fft_chunk_2, fft_chunk_4, fft_chunk_n, fft_chunk_n_simd, Float};
+use crate::kernels::{fft_chunk_2, fft_chunk_4, fft_chunk_n, fft_chunk_n_simd};
 use crate::options::Options;
 use crate::planner::{Direction, Planner};
 use crate::twiddles::filter_twiddles;
@@ -30,7 +32,7 @@ mod twiddles;
 ///
 /// ## References
 /// <https://inst.eecs.berkeley.edu/~ee123/sp15/Notes/Lecture08_FFT_and_SpectAnalysis.key.pdf>
-pub fn fft(reals: &mut [Float], imags: &mut [Float], direction: Direction) {
+pub fn fft<T: Float>(reals: &mut [T], imags: &mut [T], direction: Direction) {
     assert_eq!(
         reals.len(),
         imags.len(),
@@ -59,9 +61,9 @@ pub fn fft(reals: &mut [Float], imags: &mut [Float], direction: Direction) {
 /// # Panics
 ///
 /// Panics if `reals.len() != imags.len()`, or if the input length is *not* a power of two.
-pub fn fft_with_opts_and_plan(
-    reals: &mut [Float],
-    imags: &mut [Float],
+pub fn fft_with_opts_and_plan<T: Float>(
+    reals: &mut [T],
+    imags: &mut [T],
     opts: &Options,
     planner: &mut Planner,
 ) {
@@ -112,7 +114,7 @@ mod tests {
 
     use utilities::{
         assert_f64_closeness,
-        rustfft::{num_complex::Complex64, FftPlanner},
+        rustfft::{FftPlanner, num_complex::Complex64},
     };
 
     use crate::planner::Direction;

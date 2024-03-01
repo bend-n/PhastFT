@@ -23,3 +23,6 @@ panic = "abort"
 [profile.profiling]
 inherits = "release"
 debug = true
+
+[dependencies]
+num-traits = "0.2.18"

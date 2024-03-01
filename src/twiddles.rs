@@ -1,6 +1,7 @@
 use std::{f64::consts::PI, simd::f64x8};
 
-use crate::kernels::Float;
+use num_traits::Float;
+
 use crate::planner::Direction;
 
 pub(crate) struct Twiddles {
